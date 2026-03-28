@@ -1,0 +1,56 @@
+# Environment
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Model weights — never commit these
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.gguf
+*.ggml
+model_cache/
+weights/
+
+# FAISS index (rebuild from scripts/build_faiss_index.py)
+rag/index/
+
+# Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Reports output
+output/
+reports/generated/
+
+# Test cache
+.pytest_cache/
+.coverage
+htmlcov/

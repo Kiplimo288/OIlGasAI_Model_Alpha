@@ -1,0 +1,59 @@
+name: OilGasAI CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install CPU-only dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Install CPU-compatible versions for CI (no GPU required)
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install fastapi uvicorn pydantic python-dotenv loguru \
+                      numpy pandas scipy scikit-learn \
+                      sentence-transformers faiss-cpu \
+                      pytest pytest-asyncio httpx
+
+      - name: Run sensor unit tests (no model required)
+        run: |
+          pytest tests/test_sensors.py -v
+
+      - name: Run API tests (mocked backend)
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          USE_HF_API: "true"
+        run: |
+          pytest tests/test_api.py -v
+
+      - name: Run inference tests (mocked)
+        run: |
+          pytest tests/test_inference.py -v
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install ruff
+        run: pip install ruff
+      - name: Lint
+        run: ruff check . --ignore E501
