@@ -1,6 +1,6 @@
 """
 test_model.py
--------------
+---------------
 Quick smoke test to verify OilGasAI-Model-Alpha is loading and responding correctly.
 
 Usage:
