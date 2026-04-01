@@ -1,4 +1,4 @@
-# Core ML
+# Core ML for the model
 torch>=2.0.0
 transformers>=5.1.0
 peft>=0.12.0
